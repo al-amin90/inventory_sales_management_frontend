@@ -23,7 +23,7 @@ const Roles = () => {
   const [roleName, setRoleName] = useState("");
   const [expanded, setExpanded] = useState<string | null>(null);
 
-  const { data, isLoading } = useGetDynamicQuery({ url: "/roles" });
+  const { data, isLoading } = useGetDynamicQuery({ url: "/role" });
   const roles = data?.data || [];
 
   const [createRole, { isLoading: creating }] = usePostDynamicMutation();
@@ -33,7 +33,7 @@ const Roles = () => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await createRole({ url: "/roles", data: { roleName } }).unwrap();
+      await createRole({ url: "/role", data: { roleName } }).unwrap();
       toast.success("Role created");
       setRoleName("");
       setModalOpen(false);
@@ -44,7 +44,7 @@ const Roles = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteRole({ url: `/roles/${id}` }).unwrap();
+      await deleteRole({ url: `/role/${id}` }).unwrap();
       toast.success("Role deleted");
     } catch {
       toast.error("Delete failed");
@@ -59,7 +59,7 @@ const Roles = () => {
   ) => {
     try {
       await updatePermission({
-        url: `/roles/${roleId}/module-permission`,
+        url: `/role/${roleId}/module-permission`,
         data: {
           moduleName,
           ...(field === "access"

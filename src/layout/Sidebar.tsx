@@ -6,6 +6,7 @@ import {
   Shield,
   LogOut,
   Boxes,
+  List,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { logoutUser } from "@/redux/features/auth/authSlice";
@@ -13,9 +14,11 @@ import { removeToken } from "@/utils/auth";
 
 const navItems = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/dashboard/roles", icon: Shield, label: "Roles", adminOnly: true },
+
   { to: "/dashboard/products", icon: Package, label: "Products" },
   { to: "/dashboard/sales", icon: ShoppingCart, label: "Sales" },
-  { to: "/dashboard/roles", icon: Shield, label: "Roles", adminOnly: true },
+  { to: "/dashboard/sales-list", icon: List, label: "Sales list" },
 ];
 
 export const Sidebar = () => {

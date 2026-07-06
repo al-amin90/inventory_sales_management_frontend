@@ -23,7 +23,7 @@ const CreateSale = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const debouncedSearch = useDebounce(search);
 
-  const { data, isLoading } = useGetDynamicQuery({
+  const { refetch, data, isLoading } = useGetDynamicQuery({
     url: "/product",
     params: { limit: 20, searchTerm: debouncedSearch },
   });
@@ -81,7 +81,8 @@ const CreateSale = () => {
           quantity: c.quantity,
         })),
       };
-      await createSale({ url: "/sales", data: payload }).unwrap();
+      await createSale({ url: "/sale", data: payload }).unwrap();
+      refetch();
       toast.success("Sale created successfully!");
       setCart([]);
     } catch (err: any) {

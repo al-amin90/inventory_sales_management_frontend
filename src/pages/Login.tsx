@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Boxes, Eye, EyeOff, Loader2 } from "lucide-react";
 import { usePostDynamicMutation } from "@/redux/features/dynamic/dynamicApi";
@@ -108,6 +108,16 @@ const Login = () => {
 
           <p className="text-center text-slate-500 text-xs mt-6">
             Admin: admin@erp.com / admin123
+          </p>
+
+          <p className="text-center text-slate-400 text-sm mt-6">
+            Don't have an account?{" "}
+            <Link
+              to="/register"
+              className="text-violet-400 hover:text-violet-300 font-medium"
+            >
+              Create one
+            </Link>
           </p>
         </div>
       </div>

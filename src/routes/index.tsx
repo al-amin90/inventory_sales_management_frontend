@@ -6,6 +6,7 @@ import Products from "@/pages/products/Products";
 import CreateSale from "@/pages/sales/CreateSale";
 import Roles from "@/pages/roles/Roles";
 import Dashboard from "@/pages/Dashboard";
+import SalesList from "@/pages/salesList/SalesList";
 
 export const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -18,9 +19,14 @@ export const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <Dashboard /> },
+
+      { path: "roles", element: <Roles /> },
       { path: "products", element: <Products /> },
       { path: "sales", element: <CreateSale /> },
-      { path: "roles", element: <Roles /> },
+      {
+        path: "sales-list",
+        element: <SalesList />,
+      },
     ],
   },
   { path: "*", element: <Login /> },
