@@ -7,11 +7,12 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { toast } from "sonner";
 import { logoutUser } from "../features/auth/authSlice";
-import { removeToken } from "@/utils/auth";
+
 import { RootState } from "../store";
+import { removeToken } from "@/utils/auth";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api/v1`,
+  baseUrl: `http://localhost:5000/api/v1`,
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;
     let token = state?.auth?.accessToken;
@@ -33,7 +34,7 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithAuth: BaseQueryFn
+const baseQueryWithAuth: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
@@ -43,7 +44,9 @@ const baseQueryWithAuth: BaseQueryFn
   if (result?.error?.status === 401) {
     const errorData = result.error.data as { message?: string };
     toast.error(errorData?.message || "Session expired. Please login again.");
+
     removeToken();
+
     api.dispatch(logoutUser());
     window.location.href = "/login";
   }
