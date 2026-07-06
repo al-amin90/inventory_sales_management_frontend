@@ -107,7 +107,9 @@ const Login = () => {
           </form>
 
           <p className="text-center text-slate-500 text-xs mt-6">
-            Admin: admin@erp.com / admin123
+            Admin: admin@erp.com | Pass: admin123 <br />
+            Employee: employee@gmail.com | Pass: 12345678 <br />
+            Manager: manager@gmail.com | Pass: 12345678
           </p>
 
           <p className="text-center text-slate-400 text-sm mt-6">

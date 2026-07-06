@@ -22,6 +22,7 @@ const SalesList = () => {
   const sales: ISale[] = data?.data || [];
   const meta: IMeta = data?.meta;
 
+  console.log("sales", sales);
   useErrorHandler(error);
 
   // Total revenue
