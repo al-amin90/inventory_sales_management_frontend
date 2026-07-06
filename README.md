@@ -7,7 +7,8 @@ A React + Vite frontend for inventory and sales management, built with TypeScrip
 - Admin: admin@erp.com | Password: admin123
 - Employee: employee@gmail.com | Password: 12345678
 - Manager: manager@gmail.com | Password: 12345678
-  **Create a new Role, then Give Permission to web in that role. Register with that role and test it. You also use Pre created Account**
+
+**Create a new Role, then Give Permission to web in that role. Register with that role and test it. You also use Pre created Account In up**
 
 ## Key Features
 
