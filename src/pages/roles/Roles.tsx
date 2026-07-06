@@ -38,6 +38,7 @@ const Roles = () => {
       setRoleName("");
       setModalOpen(false);
     } catch (err: any) {
+      console.log("err", err);
       toast.error(err?.data?.message || "Failed");
     }
   };
@@ -67,8 +68,9 @@ const Roles = () => {
             : { permissions: { [field]: value } }),
         },
       }).unwrap();
-    } catch {
-      toast.error("Update failed");
+    } catch (err: any) {
+      console.log("err", err);
+      toast.error(err?.data?.message || "Failed");
     }
   };
 
@@ -150,52 +152,116 @@ const Roles = () => {
                           key={moduleName}
                           className="bg-slate-800/50 rounded-lg p-4 border border-slate-700"
                         >
+                          {/* Module header with On/Off radio */}
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-white font-medium text-sm">
                               {moduleName}
                             </span>
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-slate-400">
-                                Access
-                              </span>
-                              <Switch
-                                checked={mod?.access || false}
-                                onCheckedChange={(v) =>
+                            <div className="flex items-center gap-1 bg-slate-900 rounded-lg p-0.5 border border-slate-700">
+                              <button
+                                onClick={() =>
                                   togglePermission(
                                     role._id,
                                     moduleName,
                                     "access",
-                                    v,
+                                    true,
                                   )
                                 }
-                                className="data-[state=checked]:bg-violet-600"
-                              />
+                                className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+                                  mod?.access
+                                    ? "bg-emerald-600 text-white shadow"
+                                    : "text-slate-400 hover:text-slate-200"
+                                }`}
+                              >
+                                On
+                              </button>
+                              <button
+                                onClick={() =>
+                                  togglePermission(
+                                    role._id,
+                                    moduleName,
+                                    "access",
+                                    false,
+                                  )
+                                }
+                                className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+                                  !mod?.access
+                                    ? "bg-red-600 text-white shadow"
+                                    : "text-slate-400 hover:text-slate-200"
+                                }`}
+                              >
+                                Off
+                              </button>
                             </div>
                           </div>
+
+                          {/* Permission pills */}
                           <div className="grid grid-cols-2 gap-2">
-                            {PERMISSIONS.map((perm) => (
-                              <div
-                                key={perm}
-                                className="flex items-center justify-between bg-slate-800 rounded px-3 py-1.5"
-                              >
-                                <span className="text-slate-400 text-xs capitalize">
-                                  {perm}
-                                </span>
-                                <Switch
-                                  checked={mod?.permissions?.[perm] || false}
-                                  disabled={!mod?.access}
-                                  onCheckedChange={(v) =>
-                                    togglePermission(
-                                      role._id,
-                                      moduleName,
-                                      perm,
-                                      v,
-                                    )
-                                  }
-                                  className="data-[state=checked]:bg-emerald-600 scale-75"
-                                />
-                              </div>
-                            ))}
+                            {PERMISSIONS.map((perm) => {
+                              const isOn = mod?.permissions?.[perm] || false;
+                              const disabled = !mod?.access;
+                              return (
+                                <div
+                                  key={perm}
+                                  className={`flex items-center justify-between rounded-lg px-3 py-2 border transition-all ${
+                                    disabled
+                                      ? "bg-slate-800/30 border-slate-800 opacity-40 cursor-not-allowed"
+                                      : "bg-slate-800 border-slate-700"
+                                  }`}
+                                >
+                                  <span className="text-slate-400 text-xs capitalize">
+                                    {perm}
+                                  </span>
+                                  {/* On/Off radio pill */}
+                                  <div
+                                    className={`flex items-center gap-0.5 rounded p-0.5 ${
+                                      disabled
+                                        ? ""
+                                        : "bg-slate-900 border border-slate-700"
+                                    }`}
+                                  >
+                                    <button
+                                      disabled={disabled}
+                                      onClick={() =>
+                                        !disabled &&
+                                        togglePermission(
+                                          role._id,
+                                          moduleName,
+                                          perm,
+                                          true,
+                                        )
+                                      }
+                                      className={`px-2 py-0.5 rounded text-xs font-medium transition-all ${
+                                        isOn && !disabled
+                                          ? "bg-emerald-600 text-white"
+                                          : "text-slate-500"
+                                      }`}
+                                    >
+                                      On
+                                    </button>
+                                    <button
+                                      disabled={disabled}
+                                      onClick={() =>
+                                        !disabled &&
+                                        togglePermission(
+                                          role._id,
+                                          moduleName,
+                                          perm,
+                                          false,
+                                        )
+                                      }
+                                      className={`px-2 py-0.5 rounded text-xs font-medium transition-all ${
+                                        !isOn && !disabled
+                                          ? "bg-red-600 text-white"
+                                          : "text-slate-500"
+                                      }`}
+                                    >
+                                      Off
+                                    </button>
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       );

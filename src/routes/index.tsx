@@ -7,9 +7,11 @@ import CreateSale from "@/pages/sales/CreateSale";
 import Roles from "@/pages/roles/Roles";
 import Dashboard from "@/pages/Dashboard";
 import SalesList from "@/pages/salesList/SalesList";
+import Register from "@/pages/Register";
 
 export const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
   {
     path: "/dashboard",
     element: (
