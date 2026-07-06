@@ -24,8 +24,8 @@ const CreateSale = () => {
   const debouncedSearch = useDebounce(search);
 
   const { data, isLoading } = useGetDynamicQuery({
-    url: "/products",
-    params: { limit: 20, search: debouncedSearch },
+    url: "/product",
+    params: { limit: 20, searchTerm: debouncedSearch },
   });
 
   const products: IProduct[] = (data?.data || []).filter(

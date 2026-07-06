@@ -52,9 +52,10 @@ const Products = () => {
   const debouncedSearch = useDebounce(search);
 
   const { data, isLoading } = useGetDynamicQuery({
-    url: "/products",
-    params: { page, limit: 8, search: debouncedSearch },
+    url: "/product",
+    params: { page, limit: 8, searchTerm: debouncedSearch },
   });
+  console.log("data", data);
 
   const products: IProduct[] = data?.data || [];
   const meta: IMeta = data?.meta;
@@ -102,12 +103,12 @@ const Products = () => {
     try {
       if (editProduct) {
         await updateProduct({
-          url: `/products/${editProduct._id}`,
+          url: `/product/${editProduct._id}`,
           data: fd,
         }).unwrap();
         toast.success("Product updated");
       } else {
-        await createProduct({ url: "/products", data: fd }).unwrap();
+        await createProduct({ url: "/product", data: fd }).unwrap();
         toast.success("Product created");
       }
       setModalOpen(false);
@@ -119,7 +120,7 @@ const Products = () => {
   const handleDelete = async () => {
     if (!deleteId) return;
     try {
-      await deleteProduct({ url: `/products/${deleteId}` }).unwrap();
+      await deleteProduct({ url: `/product/${deleteId}` }).unwrap();
       toast.success("Product deleted");
       setDeleteId(null);
     } catch {
@@ -214,7 +215,6 @@ const Products = () => {
           </Button>
         }
       />
-
       {/* Search */}
       <div className="relative mb-4 max-w-xs">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -228,144 +228,196 @@ const Products = () => {
           className="pl-9 bg-slate-900 border-slate-700 text-white placeholder:text-slate-500 focus:border-violet-500"
         />
       </div>
-
       <AppTable columns={columns} data={products} isLoading={isLoading} />
       <AppPagination meta={meta} page={page} onPageChange={setPage} />
 
-      {/* Add/Edit Modal */}
       <AppModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={editProduct ? "Edit Product" : "Add Product"}
-        size="lg"
+        title={editProduct ? "Edit Product" : " Add New Product"}
+        size="3xl"
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Image upload */}
-          <div className="flex items-center gap-4">
-            <div className="w-20 h-20 rounded-xl border border-slate-700 overflow-hidden bg-slate-800 flex items-center justify-center flex-shrink-0">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Image upload - Enhanced design */}
+          <div className="flex items-center gap-6 p-5 bg-slate-800/30 rounded-2xl border border-slate-700/50 backdrop-blur-sm hover:border-violet-500/30 transition-all duration-300">
+            <div className="w-32 h-32 rounded-2xl border-2 border-dashed border-slate-600/50 overflow-hidden bg-slate-800/50 flex items-center justify-center flex-shrink-0 hover:border-violet-500 transition-all duration-300 hover:scale-105 group">
               {imagePreview ? (
                 <img
                   src={imagePreview}
-                  alt=""
+                  alt="Product"
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <Package className="w-8 h-8 text-slate-600" />
+                <div className="flex flex-col items-center text-slate-500 group-hover:text-violet-400 transition-colors">
+                  <Package className="w-12 h-12 mb-1" />
+                  <span className="text-xs">No image</span>
+                </div>
               )}
             </div>
             <div className="flex-1">
-              <Label className="text-slate-300 text-sm">
+              <Label className="text-slate-200 text-lg font-semibold">
                 Product Image{" "}
-                {!editProduct && <span className="text-red-400">*</span>}
+                {!editProduct && <span className="text-violet-400">*</span>}
               </Label>
+              <p className="text-slate-400 text-sm mt-1 mb-3">
+                Upload a product image (JPG, PNG, WebP) - Max 5MB
+              </p>
               <Input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
                 required={!editProduct}
-                className="mt-1.5 bg-slate-800 border-slate-700 text-slate-300 file:bg-violet-600 file:text-white file:border-0 file:rounded file:px-3 file:py-1 file:text-xs"
+                className="w-full bg-slate-800/50 border-slate-600/50 text-slate-200 text-sm rounded-xl file:bg-gradient-to-r file:from-violet-600 file:to-purple-600 file:text-white file:border-0 file:rounded-lg file:px-6  file:text-sm file:font-semibold hover:file:shadow-lg hover:file:shadow-violet-500/25 transition-all duration-200 cursor-pointer"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label className="text-slate-300 text-sm">Name *</Label>
+          {/* Form Fields - Consistent sizing */}
+          <div className="grid grid-cols-2 gap-5">
+            <div className="space-y-2.5">
+              <Label className="text-slate-300 text-sm font-semibold uppercase tracking-wider">
+                Product Name <span className="text-violet-400">*</span>
+              </Label>
               <Input
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 required
-                className="bg-slate-800 border-slate-700 text-white"
+                placeholder="Enter product name"
+                className="w-full h-12 px-4 rounded-xl bg-slate-800/50 border-slate-600/50 text-white text-base placeholder:text-slate-500 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 transition-all duration-200"
               />
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-slate-300 text-sm">SKU *</Label>
+
+            <div className="space-y-2.5">
+              <Label className="text-slate-300 text-sm font-semibold uppercase tracking-wider">
+                SKU <span className="text-violet-400">*</span>
+              </Label>
               <Input
                 value={form.sku}
                 onChange={(e) => setForm({ ...form, sku: e.target.value })}
                 required
-                className="bg-slate-800 border-slate-700 text-white"
+                placeholder="e.g. PRD-001"
+                className="w-full h-12 px-4 rounded-xl bg-slate-800/50 border-slate-600/50 text-white text-base placeholder:text-slate-500 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 transition-all duration-200"
               />
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-slate-300 text-sm">Category *</Label>
+
+            <div className="space-y-2.5">
+              <Label className="text-slate-300 text-sm font-semibold uppercase tracking-wider">
+                Category <span className="text-violet-400">*</span>
+              </Label>
               <select
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
                 required
-                className="w-full h-9 px-3 rounded-md bg-slate-800 border border-slate-700 text-white text-sm focus:border-violet-500 outline-none"
+                className="w-full h-12 px-4 rounded-xl bg-slate-800/50 border border-slate-600/50 text-white text-base focus:border-violet-500 outline-none focus:ring-2 focus:ring-violet-500/20 transition-all duration-200 appearance-none cursor-pointer"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 1rem center",
+                  backgroundSize: "1.5rem",
+                }}
               >
-                <option value="">Select category</option>
+                <option value="" className="bg-slate-800">
+                  Select category
+                </option>
                 {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>
+                  <option key={c} value={c} className="bg-slate-800">
                     {c}
                   </option>
                 ))}
               </select>
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-slate-300 text-sm">Stock *</Label>
+
+            <div className="space-y-2.5">
+              <Label className="text-slate-300 text-sm font-semibold uppercase tracking-wider">
+                Stock Quantity <span className="text-violet-400">*</span>
+              </Label>
               <Input
                 type="number"
                 min={0}
                 value={form.stock}
                 onChange={(e) => setForm({ ...form, stock: e.target.value })}
                 required
-                className="bg-slate-800 border-slate-700 text-white"
+                placeholder="0"
+                className="w-full h-12 px-4 rounded-xl bg-slate-800/50 border-slate-600/50 text-white text-base placeholder:text-slate-500 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 transition-all duration-200"
               />
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-slate-300 text-sm">Purchase Price *</Label>
-              <Input
-                type="number"
-                min={0}
-                value={form.purchasePrice}
-                onChange={(e) =>
-                  setForm({ ...form, purchasePrice: e.target.value })
-                }
-                required
-                className="bg-slate-800 border-slate-700 text-white"
-              />
+
+            <div className="space-y-2.5">
+              <Label className="text-slate-300 text-sm font-semibold uppercase tracking-wider">
+                Purchase Price <span className="text-violet-400">*</span>
+              </Label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg font-semibold">
+                  ৳
+                </span>
+                <Input
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={form.purchasePrice}
+                  onChange={(e) =>
+                    setForm({ ...form, purchasePrice: e.target.value })
+                  }
+                  required
+                  placeholder="0.00"
+                  className="w-full h-12 pl-10 pr-4 rounded-xl bg-slate-800/50 border-slate-600/50 text-white text-base placeholder:text-slate-500 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 transition-all duration-200"
+                />
+              </div>
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-slate-300 text-sm">Selling Price *</Label>
-              <Input
-                type="number"
-                min={0}
-                value={form.sellingPrice}
-                onChange={(e) =>
-                  setForm({ ...form, sellingPrice: e.target.value })
-                }
-                required
-                className="bg-slate-800 border-slate-700 text-white"
-              />
+
+            <div className="space-y-2.5">
+              <Label className="text-slate-300 text-sm font-semibold uppercase tracking-wider">
+                Selling Price <span className="text-violet-400">*</span>
+              </Label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg font-semibold">
+                  ৳
+                </span>
+                <Input
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={form.sellingPrice}
+                  onChange={(e) =>
+                    setForm({ ...form, sellingPrice: e.target.value })
+                  }
+                  required
+                  placeholder="0.00"
+                  className="w-full h-12 pl-10 pr-4 rounded-xl bg-slate-800/50 border-slate-600/50 text-white text-base placeholder:text-slate-500 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 transition-all duration-200"
+                />
+              </div>
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
+          {/* Action Buttons */}
+          <div className="flex justify-end gap-3 pt-6 border-t border-slate-700/50">
             <Button
               type="button"
               variant="outline"
               onClick={() => setModalOpen(false)}
-              className="border-slate-700 bg-transparent text-slate-300"
+              className="border-slate-600/50 bg-transparent text-slate-300 hover:bg-slate-800/50 hover:text-white text-base font-medium px-8 py-2.5 h-12 rounded-xl transition-all duration-200 hover:border-slate-500"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={creating || updating}
-              className="bg-violet-600 hover:bg-violet-700"
+              className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white text-base font-semibold px-10 py-2.5 h-12 rounded-xl shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all duration-200 hover:scale-105"
             >
-              {creating || updating
-                ? "Saving..."
-                : editProduct
-                  ? "Update"
-                  : "Create"}
+              {creating || updating ? (
+                <>
+                  <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-3"></span>
+                  {editProduct ? "Updating..." : "Creating..."}
+                </>
+              ) : editProduct ? (
+                "Update Product"
+              ) : (
+                "Create Product"
+              )}
             </Button>
           </div>
         </form>
       </AppModal>
-
       {/* Delete Confirm */}
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent className="bg-slate-900 border-slate-700">
