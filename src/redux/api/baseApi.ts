@@ -19,11 +19,11 @@ const baseQuery = fetchBaseQuery({
 
     if (!token) {
       try {
-        const raw = localStorage.getItem("persist:auth");
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          token = parsed.accessToken ? JSON.parse(parsed.accessToken) : null;
-        }
+        // const raw = localStorage.getItem("persist:auth");
+        // if (raw) {
+        //   const parsed = JSON.parse(raw);
+        //   token = parsed.accessToken ? JSON.parse(parsed.accessToken) : null;
+        // }
       } catch (e) {
         console.error("Error parsing auth:", e);
       }

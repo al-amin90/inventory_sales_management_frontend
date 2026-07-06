@@ -10,11 +10,14 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import authReducer from "./features/auth/authSlice";
 import { baseApi } from "./api/baseApi";
 
-const persistConfig = { key: "auth", storage };
+const storageInstance = (storage as any)?.default ?? storage;
+const persistConfig = { key: "auth", storage: storageInstance };
+
 const persistedAuth = persistReducer(persistConfig, authReducer);
 
 export const store = configureStore({
