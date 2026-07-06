@@ -1,16 +1,79 @@
-# React + Vite
+# Inventory Sales Management Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Vite frontend for inventory and sales management, built with TypeScript, Redux Toolkit, Redux Persist, RTK Query, React Router, and Tailwind CSS.
 
-Currently, two official plugins are available:
+## Email Password
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Admin: admin@erp.com | Password: admin123
+- Employee: employee@gmail.com | Password: 12345678
+- Manager: manager@gmail.com | Password: 12345678
+  **Create a new Role, then Give Permission to web in that role. Register with that role and test it**
 
-## React Compiler
+## Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Dynamic Role & Permission Management:** Database-driven roles and permissions allowing runtime updates without code changes.
+- **Role-Based Route Protection:** Granular route guarding on the client using protected routes and server-side checks for APIs.
 
-## Expanding the ESLint configuration
+## Role-Based Authentication & Authorization
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Modular Feature-Based Architecture:**
+- **Generic Query Builder:**
+- **Global Error Handler:**
+- **Reusable Utilities:**
+
+## Validation & Best Practices
+
+The project follows these validation and best-practice guidelines:
+
+- **Proper Error Handling:**
+- **Input Validation:**
+- **Protected APIs:**
+- **Proper HTTP Status Codes:**
+- **Consistent API Response Structure:** Standardized JSON response envelope (e.g., `{ success: boolean, data: any, error?: { code, message } }`).
+
+- Dynamic Role & Dynamic Access control
+- Redux Toolkit store with RTK Query API integration
+- Redux Persist for auth state persistence
+- Client-side routing with React Router v7
+- Tailwind CSS for styling
+- Modular component and page structure
+
+## Notes
+
+- The Redux store persists authentication state using `redux-persist`.
+- The API layer is defined under `src/redux/api/baseApi.ts` and integrated via `baseApi.middleware`.
+- Route protection is provided by `src/routes/ProtectedRoute.tsx`.
+
+## Project Setup & Installation Guide
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Run the development server
+
+```bash
+npm run dev
+```
+
+Open the URL shown in the terminal (usually `http://localhost:5173`) to view the app.
+
+### Build for production
+
+```bash
+npm run build
+```
+
+### Preview the production build
+
+```bash
+npm run preview
+```
+
+### Lint the project
+
+```bash
+npm run lint
+```
