@@ -47,8 +47,9 @@ const Roles = () => {
     try {
       await deleteRole({ url: `/role/${id}` }).unwrap();
       toast.success("Role deleted");
-    } catch {
-      toast.error("Delete failed");
+    } catch (err: any) {
+      console.log("err", err);
+      toast.error(err?.data?.message || "Failed");
     }
   };
 

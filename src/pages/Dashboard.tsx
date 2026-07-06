@@ -4,6 +4,7 @@ import { IDashboard, IProduct } from "@/types";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { AppTable, Column } from "@/components/shared/AppTable";
 import { Badge } from "@/components/ui/badge";
+import { useErrorHandler } from "@/utils/useErrorHandler";
 
 const StatCard = ({
   icon: Icon,
@@ -30,12 +31,14 @@ const StatCard = ({
 );
 
 const Dashboard = () => {
-  const { data, isLoading } = useGetDynamicQuery({ url: "/dashboard" });
+  const { data, isLoading, error } = useGetDynamicQuery({ url: "/dashboard" });
   const stats: IDashboard = data?.data || {
     totalProducts: 0,
     totalSales: 0,
     lowStockProducts: [],
   };
+
+  useErrorHandler(error);
 
   const lowStockColumns: Column<IProduct>[] = [
     {

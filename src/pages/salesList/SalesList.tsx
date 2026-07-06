@@ -8,18 +8,21 @@ import { AppPagination } from "@/components/shared/AppPagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useErrorHandler } from "@/utils/useErrorHandler";
 
 const SalesList = () => {
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
-  const { data, isLoading } = useGetDynamicQuery({
+  const { data, isLoading, error } = useGetDynamicQuery({
     url: "/sale",
     params: { page, limit: 10 },
   });
 
   const sales: ISale[] = data?.data || [];
   const meta: IMeta = data?.meta;
+
+  useErrorHandler(error);
 
   // Total revenue
   const totalRevenue = sales.reduce((sum, s) => sum + s.grandTotal, 0);

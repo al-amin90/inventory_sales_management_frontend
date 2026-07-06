@@ -27,6 +27,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useErrorHandler } from "@/utils/useErrorHandler";
 
 const CATEGORIES = ["Electronics", "Clothing", "Food", "Furniture", "Other"];
 
@@ -51,7 +52,7 @@ const Products = () => {
 
   const debouncedSearch = useDebounce(search);
 
-  const { data, isLoading } = useGetDynamicQuery({
+  const { data, isLoading, error } = useGetDynamicQuery({
     url: "/product",
     params: { page, limit: 8, searchTerm: debouncedSearch },
   });
@@ -63,6 +64,8 @@ const Products = () => {
   const [createProduct, { isLoading: creating }] = usePostDynamicMutation();
   const [updateProduct, { isLoading: updating }] = usePatchDynamicMutation();
   const [deleteProduct, { isLoading: deleting }] = useDeleteDynamicMutation();
+
+  useErrorHandler(error);
 
   const openAdd = () => {
     setEditProduct(null);
@@ -123,8 +126,9 @@ const Products = () => {
       await deleteProduct({ url: `/product/${deleteId}` }).unwrap();
       toast.success("Product deleted");
       setDeleteId(null);
-    } catch {
-      toast.error("Delete failed");
+    } catch (err: any) {
+      console.log("err", err);
+      toast.error(err?.data?.message || "Failed");
     }
   };
 

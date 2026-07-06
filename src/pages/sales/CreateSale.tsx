@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useErrorHandler } from "@/utils/useErrorHandler";
 
 interface CartItem {
   product: IProduct;
@@ -23,10 +24,12 @@ const CreateSale = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const debouncedSearch = useDebounce(search);
 
-  const { refetch, data, isLoading } = useGetDynamicQuery({
+  const { refetch, data, isLoading, error } = useGetDynamicQuery({
     url: "/product",
     params: { limit: 20, searchTerm: debouncedSearch },
   });
+
+  useErrorHandler(error);
 
   const products: IProduct[] = (data?.data || []).filter(
     (p: IProduct) => p.stock > 0,
