@@ -225,7 +225,7 @@ const Roles = () => {
                           </div>
 
                           {/* Permission pills with Toggle Switches */}
-                          <div className="gap-3 grid grid-cols-2">
+                          <div className="space-y-1.5">
                             {permissionKeys.length > 0 ? (
                               permissionKeys.map((permKey) => {
                                 const isOn =
@@ -246,19 +246,34 @@ const Roles = () => {
                                     </span>
 
                                     {/* Toggle Switch for Permission */}
-                                    <ToggleSwitch
-                                      checked={mod?.access || false}
-                                      onChange={(checked) =>
-                                        togglePermission(
-                                          role._id,
-                                          moduleName,
-                                          "access",
-                                          checked,
-                                        )
-                                      }
-                                      disabled={false}
-                                      size="md"
-                                    />
+                                    <label
+                                      className={`relative inline-flex items-center ${
+                                        isDisabled
+                                          ? "cursor-not-allowed"
+                                          : "cursor-pointer"
+                                      }`}
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={isOn}
+                                        disabled={isDisabled}
+                                        onChange={(e) =>
+                                          !isDisabled &&
+                                          togglePermission(
+                                            role._id,
+                                            moduleName,
+                                            permKey,
+                                            e.target.checked,
+                                          )
+                                        }
+                                        className="sr-only peer"
+                                      />
+                                      <div
+                                        className={`w-8 h-4 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-violet-600 relative ${
+                                          isDisabled ? "opacity-50" : ""
+                                        }`}
+                                      ></div>
+                                    </label>
                                   </div>
                                 );
                               })

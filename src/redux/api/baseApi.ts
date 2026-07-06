@@ -12,7 +12,7 @@ import { RootState } from "../store";
 import { removeToken } from "@/utils/auth";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: `http://localhost:5000/api/v1`,
+  baseUrl: `https://inventory-sales-management-backend.onrender.com/api/v1`,
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;
     let token = state?.auth?.accessToken;

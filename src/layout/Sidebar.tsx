@@ -75,7 +75,7 @@ export const Sidebar = () => {
       <div className="px-3 py-4 border-t border-slate-800">
         <div className="px-3 py-2 mb-2">
           <p className="text-white text-sm font-medium">{user?.name}</p>
-          <p className="text-slate-500 text-xs capitalize">{user?.role}</p>
+          <p className="text-slate-500 text-xs capitalize">{user?.roleName}</p>
         </div>
         <button
           onClick={handleLogout}

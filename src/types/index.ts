@@ -2,7 +2,8 @@ export interface IUser {
   _id: string;
   name: string;
   email: string;
-  role: "admin" | "manager" | "employee";
+  role: string;
+  roleName: string;
 }
 
 export interface IProduct {
